@@ -2,7 +2,7 @@ package com.user;
 
 import java.io.*;
 import com.database.*;
- 
+
 public class SiteOwner implements User {
 
     OwnerDatabase o1;
@@ -15,6 +15,7 @@ public class SiteOwner implements User {
         int ch = 1;
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
             while (ch != 7) {
                 System.out.println("1.View Site 2.View Owner 3.Pay 7.Exit");
                 ch = Integer.parseInt(br.readLine());
@@ -22,7 +23,7 @@ public class SiteOwner implements User {
                 switch (ch) {
                     case 1 -> SiteDatabase.display(o1.o1.siteId);
                     case 2 -> o1.display();
-                    case 3 -> o1.editMaintainence();
+                    case 3 -> o1.payMaintainence();
                 }
             }
         } catch (Exception e) {

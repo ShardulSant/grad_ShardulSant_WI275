@@ -4,12 +4,14 @@ import java.sql.*;
 import com.database.SQLDatabase;
 
 public class Owner {
+
     public int id, paidAmount, siteId;
-    public String name;
+    public String name, status;
 
     public Owner(int id) {
         try {
             this.id = id;
+
             Connection con = SQLDatabase.getCon();
             PreparedStatement ps =
                 con.prepareStatement("SELECT * FROM OwnerDetails WHERE id=?");
@@ -17,9 +19,10 @@ public class Owner {
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                name = rs.getString(1);
-                paidAmount = rs.getInt(2);
-                siteId = rs.getInt(4);
+                name = rs.getString("Name");
+                paidAmount = rs.getInt("PaidAmount");
+                siteId = rs.getInt("SiteId");
+                status = rs.getString("Status");
             }
         } catch (Exception e) {
             e.printStackTrace();
