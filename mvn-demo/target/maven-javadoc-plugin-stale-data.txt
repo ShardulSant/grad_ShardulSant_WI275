@@ -1,0 +1,43 @@
+@options
+@packages
+-encoding
+'UTF-8'
+-protected
+--release
+17
+-sourcepath
+'C:/Users/Wissen/Documents/Maven/mvn-demo/src/main/java;C:/Users/Wissen/Documents/Maven/mvn-demo/target/generated-sources/annotations'
+-author
+-bottom
+'Copyright &#169; 2026. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/Wissen/Documents/Maven/mvn-demo/target/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'mvn-demo 1.0.0 API'
+-use
+-version
+-windowtitle
+'mvn-demo 1.0.0 API'
+io.github.shardulsant
+C:\Users\Wissen\Documents\Maven\mvn-demo\src\main\java = 1771832517987
+C:\Users\Wissen\Documents\Maven\mvn-demo\target\generated-sources\annotations = 1771834088630
+C:\Users\Wissen\Documents\Maven\mvn-demo\target\apidocs\allclasses-index.html = 1771834214901
+C:\Users\Wissen\Documents\Maven\mvn-demo\target\apidocs\allpackages-index.html = 1771834214904
+C:\Users\Wissen\Documents\Maven\mvn-demo\target\apidocs\element-list = 1771834214865
+C:\Users\Wissen\Documents\Maven\mvn-demo\target\apidocs\help-doc.html = 1771834214926
+C:\Users\Wissen\Documents\Maven\mvn-demo\target\apidocs\index-all.html = 1771834214918
+C:\Users\Wissen\Documents\Maven\mvn-demo\target\apidocs\index.html = 1771834214919
+C:\Users\Wissen\Documents\Maven\mvn-demo\target\apidocs\jquery-ui.overrides.css = 1771834214948
+C:\Users\Wissen\Documents\Maven\mvn-demo\target\apidocs\member-search-index.js = 1771834214910
+C:\Users\Wissen\Documents\Maven\mvn-demo\target\apidocs\module-search-index.js = 1771834214906
+C:\Users\Wissen\Documents\Maven\mvn-demo\target\apidocs\overview-tree.html = 1771834214892
+C:\Users\Wissen\Documents\Maven\mvn-demo\target\apidocs\package-search-index.js = 1771834214908
+C:\Users\Wissen\Documents\Maven\mvn-demo\target\apidocs\script.js = 1771834214931
+C:\Users\Wissen\Documents\Maven\mvn-demo\target\apidocs\search.js = 1771834214935
+C:\Users\Wissen\Documents\Maven\mvn-demo\target\apidocs\stylesheet.css = 1771834214929
+C:\Users\Wissen\Documents\Maven\mvn-demo\target\apidocs\tag-search-index.js = 1771834214912
+C:\Users\Wissen\Documents\Maven\mvn-demo\target\apidocs\type-search-index.js = 1771834214909
