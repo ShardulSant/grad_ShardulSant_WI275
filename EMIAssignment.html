@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <title> Loan Assignment</title>
+        <script>
+            function loanType(){
+                var loan = document.getElementById("loan").value
+                if(loan == "CAR"){
+                    loanInterest=12
+                    document.getElementById("amount").setAttribute("min",500000)
+                    document.getElementById("duration").setAttribute("max",30)
+                }
+                else if(loan == "PERSONAL"){ 
+                    loanInterest=15
+                    document.getElementById("amount").setAttribute("min",100000)
+                    document.getElementById("duration").setAttribute("max",7)
+
+                    minAmount=100000
+                    maxDuration=7
+                }
+                else{
+                    loanInterest=9
+                    document.getElementById("amount").setAttribute("min",10000)
+                    document.getElementById("duration").setAttribute("max",5)
+
+                    minAmount=10000
+                    maxDuration=5
+                }
+                document.getElementById("interest").innerHTML=loanInterest+"%"
+
+                
+            }
+            function calculateEMI(event,amount,duration){
+                let form = document.getElementById("form1")
+                console.log("A" + form[0].checkValidity())
+                if(!form[0].checkValidity()) return
+                event.preventDefault();
+                document.getElementById("emi").innerHTML= ((amount*(1+(loanInterest/100)))/duration)
+            }
+        </script>
+    </head>
+    <body>
+        <h1> Loan Calculator</h1>
+        <form id="form1" onsubmit="calculateEMI(event,amount.value,duration.value)">
+            Applicant : <input type="text"><br></br>
+            Type :  <select id="loan" onchange="loanType()">
+                        <option>HOME</option>
+                        <option>CAR</option>
+                        <option>PERSONAL</option>
+                    </select><br></br>
+        INTEREST : <span id= "interest"></span><br></br>
+        AMOUNT : <input id="amount" type="number" required><br></br>
+        DURATION : <input id="duration" type="number" required><br></br>
+        <button type="submit" >Calculate EMI</button>
+        </form>
+        EMI : <div id="emi"></div><br></br>
+    </body>
+</html>
