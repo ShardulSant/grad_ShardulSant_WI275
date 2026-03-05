@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Our Bank</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'DM Sans', sans-serif; background: #f5f3ef; }
+        header { background: linear-gradient(135deg, #c8972a, #f0c040); padding: 1.2rem 1rem; }
+        header h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.4rem, 4vw, 2rem); letter-spacing: 1px; }
+        header p { font-size: 0.9rem; opacity: 0.85; }
+        footer { background: linear-gradient(135deg, #c8972a, #f0c040); font-size: 0.85rem; }
+
+        #sidebar {
+            width: 220px; min-width: 220px; background: #1a1a2e;
+            transition: transform 0.3s ease;
+            z-index: 100;
+        }
+        #sidebar .btn-outline-light { border-radius: 8px; font-size: 0.9rem; text-align: left; padding: 0.55rem 1rem; }
+        #sidebar .btn-outline-light:hover { background: #c8972a; border-color: #c8972a; }
+
+        #menuToggle { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; }
+        #menuToggle span { display: block; width: 24px; height: 2px; background: #fff; margin: 5px 0; border-radius: 2px; transition: 0.3s; }
+        #menuToggle.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        #menuToggle.open span:nth-child(2) { opacity: 0; }
+        #menuToggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+        .page-card { border: none; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+        .page-card h3 { font-family: 'Playfair Display', serif; color: #1a1a2e; }
+        .btn-primary { background: #1a1a2e; border: none; border-radius: 8px; }
+        .btn-primary:hover { background: #2d2d4e; }
+        .btn-success { background: #2e7d52; border: none; border-radius: 8px; }
+        .btn-success:hover { background: #246040; }
+        .btn-warning { background: #c8972a; border: none; color: #fff; border-radius: 8px; }
+        .btn-warning:hover { background: #b07d1f; color: #fff; }
+        .balance-chip { background: #f0c04020; border: 1px solid #c8972a; color: #8a6000; border-radius: 10px; padding: 0.5rem 1.2rem; display: inline-block; font-weight: 500; }
+        .form-control, .form-select { border-radius: 8px; border: 1px solid #ddd; font-size: 0.9rem; }
+        .form-control:focus, .form-select:focus { border-color: #c8972a; box-shadow: 0 0 0 3px #c8972a25; }
+        .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 99; }
+
+        @media (max-width: 768px) {
+            #sidebar {
+                position: fixed; top: 0; left: 0; height: 100vh;
+                transform: translateX(-100%);
+                padding-top: 5rem !important;
+            }
+            #sidebar.open { transform: translateX(0); }
+            .overlay.open { display: block; }
+            #menuToggle { display: block; }
+            #pageDisplay { padding: 1rem !important; }
+            .page-card { width: 100% !important; }
+        }
+    </style>
+    <script defer>
+        var loanInterest = 9, balance = 10000;
+
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('menuToggle').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('open');
+        }
+        function closeMenu() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('menuToggle').classList.remove('open');
+            document.getElementById('overlay').classList.remove('open');
+        }
+
+        function nav(fn) { closeMenu(); fn(); }
+
+        function loanType() {
+            var loan = document.getElementById("loan").value;
+            if (loan == "CAR") { loanInterest = 12; amount.setAttribute("min", 500000); duration.setAttribute("max", 30); }
+            else if (loan == "PERSONAL") { loanInterest = 15; amount.setAttribute("min", 100000); duration.setAttribute("max", 7); }
+            else { loanInterest = 9; amount.setAttribute("min", 10000); duration.setAttribute("max", 5); }
+            document.getElementById("interest").innerHTML = loanInterest + "%";
+        }
+
+        function calculateEMI(event) {
+            event.preventDefault();
+            let form = document.getElementById("form1");
+            if (!form.checkValidity()) { form.classList.add("was-validated"); return; }
+            let amt = parseFloat(amount.value), dur = parseFloat(duration.value);
+            document.getElementById("emi").innerHTML =
+                `<div class="alert alert-success mt-3 text-center">EMI : ₹${((amt * (1 + (loanInterest / 100))) / dur).toFixed(2)}</div>`;
+        }
+
+        function homePage() {
+            pageDisplay.innerHTML = `
+            <div class="card page-card p-4 w-50 text-center">
+                <h3 class="mb-2">Home</h3>
+                <div class="balance-chip my-3">Balance: ₹${balance}</div>
+                <div class="d-grid gap-2 mt-3">
+                    <button class="btn btn-primary" onclick="withdrawPage()">Withdraw Money</button>
+                    <button class="btn btn-success" onclick="depositPage()">Deposit Money</button>
+                    <button class="btn btn-warning" onclick="openAccountPage()">Open Savings Account</button>
+                </div>
+            </div>`;
+        }
+
+        function withdrawPage() {
+            pageDisplay.innerHTML = `
+            <div class="card page-card p-4 w-50">
+                <h3 class="text-center mb-4">Withdraw Money</h3>
+                <form id="withdrawForm" class="needs-validation" novalidate onsubmit="processWithdraw(event)">
+                    <div class="mb-3">
+                        <label class="form-label">Enter Amount</label>
+                        <input type="number" id="withdrawAmount" class="form-control" required min="1">
+                        <div class="invalid-feedback">Enter valid withdrawal amount.</div>
+                    </div>
+                    <button class="btn btn-primary w-100">Withdraw</button>
+                </form>
+                <div id="withdrawMsg"></div>
+            </div>`;
+        }
+
+        function processWithdraw(event) {
+            event.preventDefault();
+            let form = document.getElementById("withdrawForm");
+            if (!form.checkValidity()) { form.classList.add("was-validated"); return; }
+            let amt = parseFloat(withdrawAmount.value);
+            if (amt > balance) {
+                document.getElementById("withdrawMsg").innerHTML = `<div class="alert alert-danger mt-3">Insufficient Balance!</div>`;
+                return;
+            }
+            balance -= amt;
+            document.getElementById("withdrawMsg").innerHTML = `<div class="alert alert-success mt-3">Withdrawal Successful! New Balance: ₹${balance}</div>`;
+        }
+
+        function depositPage() {
+            pageDisplay.innerHTML = `
+            <div class="card page-card p-4 w-50">
+                <h3 class="text-center mb-4">Deposit Money</h3>
+                <form id="depositForm" class="needs-validation" novalidate onsubmit="processDeposit(event)">
+                    <div class="mb-3">
+                        <label class="form-label">Enter Amount</label>
+                        <input type="number" id="depositAmount" class="form-control" required min="1">
+                        <div class="invalid-feedback">Enter valid deposit amount.</div>
+                    </div>
+                    <button class="btn btn-success w-100">Deposit</button>
+                </form>
+                <div id="depositMsg"></div>
+            </div>`;
+        }
+
+        function processDeposit(event) {
+            event.preventDefault();
+            let form = document.getElementById("depositForm");
+            if (!form.checkValidity()) { form.classList.add("was-validated"); return; }
+            let amt = parseFloat(depositAmount.value);
+            balance += amt;
+            document.getElementById("depositMsg").innerHTML = `<div class="alert alert-success mt-3">Deposit Successful! New Balance: ₹${balance}</div>`;
+        }
+
+        function openAccountPage() {
+            pageDisplay.innerHTML = `
+            <div class="card page-card p-4 w-50">
+                <h3 class="text-center mb-4">Open Savings Account</h3>
+                <form id="accountForm" class="needs-validation" novalidate onsubmit="createAccount(event)">
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" required>
+                        <div class="invalid-feedback">Name is required.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Initial Deposit</label>
+                        <input type="number" id="initialDeposit" class="form-control" required min="1000">
+                        <div class="invalid-feedback">Minimum deposit ₹1000 required.</div>
+                    </div>
+                    <button class="btn btn-warning w-100">Create Account</button>
+                </form>
+                <div id="accountMsg"></div>
+            </div>`;
+        }
+
+        function createAccount(event) {
+            event.preventDefault();
+            let form = document.getElementById("accountForm");
+            if (!form.checkValidity()) { form.classList.add("was-validated"); return; }
+            balance = parseFloat(initialDeposit.value);
+            document.getElementById("accountMsg").innerHTML = `<div class="alert alert-success mt-3">Account Created! Balance: ₹${balance}</div>`;
+        }
+
+        function aboutPage() {
+            pageDisplay.innerHTML = `
+            <div class="card page-card p-4 w-50 text-center">
+                <h3 class="mb-3">About Us</h3>
+                <p class="text-muted">We provide secure, reliable and modern banking services to make your financial journey smooth and safe.</p>
+            </div>`;
+        }
+
+        function ServicesPage() {
+            pageDisplay.innerHTML = `
+            <div class="card page-card p-4 w-50">
+                <h3 class="text-center mb-4">Loan Services</h3>
+                <form id="form1" class="needs-validation" novalidate onsubmit="calculateEMI(event)">
+                    <div class="mb-3">
+                        <label class="form-label">Applicant</label>
+                        <input type="text" class="form-control" required>
+                        <div class="invalid-feedback">Applicant name is required.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Loan Type</label>
+                        <select id="loan" class="form-select" onchange="loanType()" required>
+                            <option value="">Select Loan Type</option>
+                            <option>HOME</option><option>CAR</option><option>PERSONAL</option>
+                        </select>
+                        <div class="invalid-feedback">Please select loan type.</div>
+                    </div>
+                    <p><strong>Interest:</strong> <span id="interest" class="text-warning fw-bold">9%</span></p>
+                    <div class="mb-3">
+                        <label class="form-label">Amount (₹)</label>
+                        <input id="amount" type="number" class="form-control" required>
+                        <div class="invalid-feedback">Enter valid loan amount.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Duration (Years)</label>
+                        <input id="duration" type="number" class="form-control" required>
+                        <div class="invalid-feedback">Enter valid duration.</div>
+                    </div>
+                    <button type="submit" class="btn btn-warning w-100">Calculate EMI</button>
+                </form>
+                <div id="emi"></div>
+            </div>`;
+        }
+
+        function NetbankingPage() {
+            pageDisplay.innerHTML = `
+            <div class="card page-card p-4 w-50">
+                <h3 class="text-center mb-4">Netbanking Login</h3>
+                <form class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-control" required>
+                        <div class="invalid-feedback">Username is required.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" required>
+                        <div class="invalid-feedback">Password is required.</div>
+                    </div>
+                    <button class="btn btn-warning w-100">Login</button>
+                </form>
+                <p class="text-center mt-3">New User? <span class="text-warning fw-bold" style="cursor:pointer" onclick="RegisterPage()">Register Here</span></p>
+            </div>`;
+        }
+
+        function RegisterPage() {
+            pageDisplay.innerHTML = `
+            <div class="card page-card p-4 w-50">
+                <h3 class="text-center mb-4">Register</h3>
+                <form class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" required>
+                        <div class="invalid-feedback">Full name is required.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" required>
+                        <div class="invalid-feedback">Enter valid email address.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Create Username</label>
+                        <input type="text" class="form-control" required>
+                        <div class="invalid-feedback">Username is required.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Create Password</label>
+                        <input type="password" class="form-control" required>
+                        <div class="invalid-feedback">Password is required.</div>
+                    </div>
+                    <button class="btn btn-warning w-100">Register</button>
+                </form>
+            </div>`;
+        }
+
+        function ContactPage() {
+            pageDisplay.innerHTML = `
+            <div class="card page-card p-4 text-center w-50">
+                <h3 class="mb-3">Contact Us</h3>
+                <p> +91 90012001202</p>
+                <p> support@ourbank.com</p>
+            </div>`;
+        }
+    </script>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+<div id="overlay" class="overlay" onclick="closeMenu()"></div>
+
+<header class="text-center shadow position-relative d-flex align-items-center justify-content-center">
+    <button id="menuToggle" onclick="toggleMenu()" class="position-absolute start-0 ms-3" aria-label="Menu">
+        <span></span><span></span><span></span>
+    </button>
+    <div>
+        <h1 class="fw-bold mb-0 text-dark">Our Bank</h1>
+        <p class="lead mb-0 text-dark">Banking at your doorsteps</p>
+    </div>
+</header>
+
+<div class="container-fluid flex-grow-1 d-flex p-0">
+
+    <aside id="sidebar" class="text-white p-4 d-flex flex-column">
+        <h5 class="text-center mb-4" style="color:#f0c040; font-family:'Playfair Display',serif;">Menu</h5>
+        <div class="d-grid gap-2">
+            <button class="btn btn-outline-light" onclick="nav(homePage)"> Home</button>
+            <button class="btn btn-outline-light" onclick="nav(aboutPage)"> About Us</button>
+            <button class="btn btn-outline-light" onclick="nav(ServicesPage)"> Services</button>
+            <button class="btn btn-outline-light" onclick="nav(NetbankingPage)"> Netbanking</button>
+            <button class="btn btn-outline-light" onclick="nav(ContactPage)"> Contact Us</button>
+        </div>
+    </aside>
+
+    <main id="pageDisplay" class="flex-grow-1 d-flex justify-content-center align-items-center p-4 overflow-auto">
+        <div class="card page-card p-4 text-center w-50">
+            <h3>Welcome to Our Bank</h3>
+            <p class="text-muted">Select an option from the menu.</p>
+        </div>
+    </main>
+
+</div>
+
+<footer class="text-center py-3 shadow">
+    <p class="mb-0 text-dark fw-medium">www.ourbank.com</p>
+    <small class="text-dark opacity-75">© Copyright. All rights reserved</small>
+</footer>
+
+</body>
+</html>
