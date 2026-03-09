@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Our Bank</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #fff8e1;
+        }
+
+
+        header {
+            background: #ffd500;
+            text-align: center;
+            padding: 20px;
+        }
+
+        header h1 {
+            font-size: 36px;
+        }
+
+        header h3 {
+            color: #444;
+            font-weight: normal;
+        }
+
+
+        main {
+            flex: 1;
+            display: flex;
+        }
+
+
+        nav {
+            width: 220px;
+            background: #ff9900;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+            padding: 10px;
+        }
+
+        nav div {
+            width: 90%;
+            text-align: center;
+            font-size: 20px;
+            padding: 12px;
+            color: white;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        nav div:hover {
+            background: #e68a00;
+            transform: scale(1.05);
+        }
+
+
+        #pageDisplay {
+            flex: 1;
+            padding: 40px;
+        }
+
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 350px;
+        }
+
+        input,
+        select,
+        button {
+            padding: 8px;
+            font-size: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background: #ff9900;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #e68a00;
+        }
+
+
+        #emi {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 20px;
+            color: green;
+        }
+
+
+        footer {
+            background: #ffd500;
+            text-align: center;
+            padding: 15px;
+        }
+
+
+        @media (max-width:768px) {
+
+            main {
+                flex-direction: column;
+            }
+
+            nav {
+                width: 100%;
+                flex-direction: row;
+            }
+
+            nav div {
+                font-size: 16px;
+            }
+
+        }
+    </style>
+
+
+    <script>
+
+        var loanInterest = 9
+
+        function loanType() {
+
+            var loan = document.getElementById("loan").value
+
+            if (loan == "CAR") {
+                loanInterest = 12
+                document.getElementById("amount").setAttribute("min", 500000)
+                document.getElementById("duration").setAttribute("max", 30)
+            }
+
+            else if (loan == "PERSONAL") {
+                loanInterest = 15
+                document.getElementById("amount").setAttribute("min", 100000)
+                document.getElementById("duration").setAttribute("max", 7)
+            }
+
+            else {
+                loanInterest = 9
+                document.getElementById("amount").setAttribute("min", 10000)
+                document.getElementById("duration").setAttribute("max", 5)
+            }
+
+            document.getElementById("interest").innerHTML = loanInterest + "%"
+        }
+
+        function calculateEMI(event, amount, duration) {
+
+            let form = document.getElementById("form1")
+
+            if (!form[0].checkValidity()) return
+
+            event.preventDefault()
+
+            document.getElementById("emi").innerHTML =
+                "₹ " + ((amount * (1 + (loanInterest / 100))) / duration).toFixed(2)
+
+        }
+
+        function homePage() {
+
+            var page = `
+<h2>Home Page</h2>
+<p>Welcome to our bank.</p>
+
+<ul>
+<li>Withdraw</li>
+<li>Deposit</li>
+<li>Open Savings Account</li>
+</ul>
+`
+
+            document.getElementById("pageDisplay").innerHTML = page
+        }
+
+        function aboutPage() {
+
+            var page = `
+
+<h2> About Us</h2>
+
+<p>
+At Our Bank we believe banking should be simple and secure.
+</p>
+
+<p>
+We provide trusted financial solutions for individuals and businesses.
+</p>
+
+`
+
+            document.getElementById("pageDisplay").innerHTML = page
+        }
+
+        function ServicesPage() {
+
+            var page = `
+
+<h2>Loan Services</h2>
+
+<form id="form1" onsubmit="calculateEMI(event,amount.value,duration.value)">
+
+Applicant
+<input type="text" required>
+
+Loan Type
+<select id="loan" onchange="loanType()">
+<option>HOME</option>
+<option>CAR</option>
+<option>PERSONAL</option>
+</select>
+
+Interest : <span id="interest">9%</span>
+
+Amount
+<input id="amount" type="number" required>
+
+Duration
+<input id="duration" type="number" required>
+
+<button type="submit">Calculate EMI</button>
+
+</form>
+
+<div id="emi"></div>
+
+`
+
+            document.getElementById("pageDisplay").innerHTML = page
+        }
+
+        function NetbankingPage() {
+
+            var page = `
+
+<h2>Netbanking</h2>
+
+<form>
+
+Username
+<input type="text">
+
+Password
+<input type="password">
+
+<button type="submit">Login</button>
+<button type="reset">Reset</button>
+
+</form>
+
+`
+
+            document.getElementById("pageDisplay").innerHTML = page
+        }
+
+        function ContactPage() {
+
+            var page = `
+
+<h2> Contact Us</h2>
+
+<p>
+We are here to help with any banking queries.
+</p>
+
+`
+
+            document.getElementById("pageDisplay").innerHTML = page
+        }
+
+    </script>
+
+</head>
+
+
+<body>
+
+    <header>
+        <h1>Our Bank</h1>
+        <h3>Banking at your doorsteps</h3>
+    </header>
+
+    <main>
+
+        <nav>
+
+            <div onclick="homePage()">Home</div>
+            <div onclick="aboutPage()">About Us</div>
+            <div onclick="ServicesPage()">Services</div>
+            <div onclick="NetbankingPage()">Netbanking</div>
+            <div onclick="ContactPage()">Contact Us</div>
+
+        </nav>
+
+        <div id="pageDisplay">
+            <h2>Welcome to Our Bank</h2>
+            <p>Select an option from the menu.</p>
+        </div>
+
+    </main>
+
+    <footer>
+        <h3>www.ourbank.com</h3>
+        <p>© Copyright. All rights reserved</p>
+    </footer>
+
+</body>
+
+</html>
