@@ -1,0 +1,7 @@
+<div class="main">
+<a *ngIf = "user.getRole() == 'Admin'" routerLink="/create">Create Page | </a>
+<a *ngIf = "user.getRole() == 'Admin'" routerLink="/update">Update Page | </a>
+<a *ngIf = "user.getRole() == 'Admin'" routerLink="/delete">Delete Page | </a>
+<a routerLink="/view">View Page | </a>
+<a (click)="logout()" routerLink="/login">Logout </a>
+</div>

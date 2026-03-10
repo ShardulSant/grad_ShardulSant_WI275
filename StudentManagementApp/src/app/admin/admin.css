@@ -1,0 +1,14 @@
+h1{
+    margin: 0px;
+}
+.main{
+    text-align: center;
+}
+.main a{
+    text-decoration: none;
+
+}
+.main a:hover{
+    border: 10px;
+    box-shadow: black;
+}

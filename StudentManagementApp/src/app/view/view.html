@@ -1,0 +1,12 @@
+<app-menu></app-menu>
+<h1>Student View</h1>
+<div class="main">
+    <div class= "studentblock" *ngFor= "let student of s.viewStudent()">
+        <h3>{{student.name}}</h3>
+        <p>{{student.regNo}}</p>
+        <p>{{student.rollNo}}</p>
+        <p>{{student.standard}}</p>
+        <p>{{student.school}}</p>
+        <button class="btn" *ngIf = "user.getRole() == 'Admin'" (click)="deleteStudent(student.rollNo)">X</button>
+    </div>
+</div>
