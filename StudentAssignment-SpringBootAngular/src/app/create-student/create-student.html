@@ -1,0 +1,46 @@
+<div class="form-container">
+  <h1>Add a New Student</h1>
+  <form #form1="ngForm" (ngSubmit)="addStudent(form1)">
+    
+    <div class="form-group">
+      <label for="rollno">Roll No:</label>
+      <input type="number" id="rollno" name="rollno" ngModel required>
+    </div>
+
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" ngModel required>
+    </div>
+
+    <div class="form-group">
+      <label for="standard">Standard:</label>
+      <input type="number" id="standard" name="standard" ngModel required>
+    </div>
+
+    <div class="form-group">
+      <label for="school">School:</label>
+      <input type="text" id="school" name="school" ngModel required>
+    </div>
+
+    <div class="form-group">
+      <label for="regNo">Registration No:</label>
+      <input type="number" id="regNo" name="regNo" ngModel required>
+    </div>
+
+    <div class="form-group">
+      <label for="percentage">Percentage:</label>
+      <input type="number" id="percentage" name="percentage" ngModel required>
+    </div>
+
+    <div class="form-group">
+      <label for="gender">Gender:</label>
+      <input type="text" id="gender" name="gender" ngModel required>
+    </div>
+
+    <div class="form-buttons">
+      <button type="submit" class="submit-btn">Submit</button>
+      <button type="reset" class="reset-btn">Reset</button>
+    </div>
+
+  </form>
+</div>

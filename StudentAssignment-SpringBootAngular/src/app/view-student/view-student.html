@@ -1,0 +1,85 @@
+<div class="div1">
+<h1 id="a1">View All Students</h1>
+    <div class="section">
+        <div (click)="setCurrentSection('full-view')">View All Students</div>
+        <div (click)="setCurrentSection('regNo-view')">View By Reg No</div>
+        <div (click)="setCurrentSection('school-view')">View Student By School</div>
+        <div (click)="setCurrentSection('res-view')">View Student By Result</div>
+    </div>
+    <div class ="student-view" *ngIf="currentSection == 'full-view'">
+        <div class="student-card" *ngFor = "let s of students | async">
+            <h3>Rollno  : {{s.rollno}}</h3>
+            <p>Name : {{s.name}}</p>
+            <p>Standard : {{s.standard}}</p>
+            <p>School : {{s.school}}</p>
+            <p>Percentage : {{s.percentage}}</p>
+            <p>Reg No : {{s.regNo}}</p>
+            <p>Gender : {{s.gender}}</p>
+            <div class="view-btn">
+                <button (click) = "navigateUpdate(s)" class="edit-btn">Edit</button>
+                <button (click) = "navigateDelete(s)" class="delete-btn">Delete</button>
+            </div>
+        </div>
+    </div>
+            
+    <div class="viewBySchool" *ngIf = "currentSection == 'school-view'" >
+        Select Student School : <select #mi2>
+        <option *ngFor = "let s of students | async" >{{s.school}}</option>
+        </select>
+        <button (click)="fetchRecords(mi2.value)">Submit</button>
+        <div class="student-view">
+        <div class="student-card" *ngFor="let s  of studentSearch | async ">
+            <h3>Rollno  : {{s.rollno }}</h3>
+            <p>Name : {{s.name}}</p>
+            <p>Standard : {{s.standard}}</p>
+            <p>School : {{s.school}}</p>
+            <p>Percentage : {{s.percentage}}</p>
+            <p>Reg No : {{s.regNo}}</p>
+            <p>Gender : {{s.gender}}</p>
+            <div class="view-btn">
+                <button (click) = "navigateUpdate(s)" class="edit-btn">Edit</button>
+                <button (click) = "navigateDelete(s)" class="delete-btn">Delete</button>
+            </div>
+            </div>
+        </div>       
+    </div>
+    <div class="viewById" *ngIf = "currentSection == 'regNo-view'" >
+        Enter Student Registration Number : <input type="number" name="regNo" #mi1><br>
+        <button  (click) ="fetchRecords(mi1.value)" >Submit</button>
+        <div class="student-card" *ngIf=" stu | async as s">
+            <h3>Rollno  : {{s.rollno }}</h3>
+            <p>Name : {{s.name}}</p>
+            <p>Standard : {{s.standard}}</p>
+            <p>School : {{s.school}}</p>
+            <p>Percentage : {{s.percentage}}</p>
+            <p>Reg No : {{s.regNo}}</p>
+            <p>Gender : {{s.gender}}</p>
+            <div class="view-btn">
+                <button (click) = "navigateUpdate(s)" class="edit-btn">Edit</button>
+                <button (click) = "navigateDelete(s)" class="delete-btn">Delete</button>
+            </div>
+        
+        </div>
+
+    </div>
+    <div class ="res-view" *ngIf="currentSection == 'res-view'">
+        Select View : <input type="radio" name="view" [(ngModel)]="selectedOption" value="Pass">Pass<input type="radio" name="view" [(ngModel)]="selectedOption" value="Fail">Fail
+        <button (click) = "fetchRecords(selectedOption)">Submit</button> 
+        <div class="student-view">
+        <div class="student-card" *ngFor = "let s of studentSearch | async">
+            <h3>Rollno  : {{s.rollno}}</h3>
+            <p>Name : {{s.name}}</p>
+            <p>Standard : {{s.standard}}</p>
+            <p>School : {{s.school}}</p>
+            <p>Percentage : {{s.percentage}}</p>
+            <p>Reg No : {{s.regNo}}</p>
+            <p>Gender : {{s.gender}}</p>
+            <div class="view-btn">
+                <button (click) = "navigateUpdate(s)" class="edit-btn">Edit</button>
+                <button (click) = "navigateDelete(s)" class="delete-btn">Delete</button>
+            </div>
+        </div>
+        </div>
+    </div>
+      
+</div>

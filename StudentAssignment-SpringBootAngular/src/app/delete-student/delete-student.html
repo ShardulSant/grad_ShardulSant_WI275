@@ -1,0 +1,18 @@
+
+<div class="form-container">
+  <h1>Delete Student from Database</h1>
+
+  <form #form1="ngForm" (ngSubmit)="deleteStudent(form1)">
+    
+    <div class="form-group">
+      <label for="id">Student ID / Registration No:</label>
+      <input type="number" id="id" name="id" [(ngModel)]="regNo" required>
+    </div>
+
+    <div class="form-buttons">
+      <button type="submit" class="submit-btn">Delete</button>
+      <button type="reset" class="reset-btn">Cancel</button>
+    </div>
+
+  </form>
+</div>

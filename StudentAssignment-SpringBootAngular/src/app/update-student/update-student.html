@@ -1,0 +1,47 @@
+<div class="form-container">
+  <h1>Update an Existing Student</h1>
+
+  <form #form1="ngForm" (ngSubmit)="updateStudent(form1)">
+    
+    <div class="form-group">
+      <label for="rollno">Roll No:</label>
+      <input type="number" id="rollno" name="rollno" [(ngModel)] = "student.rollno" required>
+    </div>
+
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" [(ngModel)]="student.name" required>
+    </div>
+
+    <div class="form-group">
+      <label for="standard">Standard:</label>
+      <input type="number" id="standard" name="standard" [(ngModel)] = "student.standard" required>
+    </div>
+
+    <div class="form-group">
+      <label for="school">School:</label>
+      <input type="text" id="school" name="school" [(ngModel)] = "student.school" required>
+    </div>
+
+    <div class="form-group">
+      <label for="regNo">Registration No:</label>
+      <input type="number" id="regNo" name="regNo" [(ngModel)]= "student.regNo" required>
+    </div>
+
+    <div class="form-group">
+      <label for="percentage">Percentage:</label>
+      <input type="number" id="percentage" name="percentage" [(ngModel)] = "student.percentage" required>
+    </div>
+
+    <div class="form-group">
+      <label for="gender">Gender:</label>
+      <input type="text" id="gender" name="gender" [(ngModel)] = "student.gender" required>
+    </div>
+
+    <div class="form-buttons">
+      <button type="submit" class="submit-btn">Update</button>
+      <button type="button" class="reset-btn" >Reset</button>
+    </div>
+
+  </form>
+</div>
